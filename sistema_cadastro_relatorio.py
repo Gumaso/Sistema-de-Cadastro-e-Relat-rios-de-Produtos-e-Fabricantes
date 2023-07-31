@@ -27,3 +27,102 @@ class Fabricantes:
         self.site = site
         self.telefone = telefone
         self.uf = uf
+
+def cadastrar_fabricante():
+    while True:
+        while True:
+            nome = input("Qual o nome do fabricante?")
+            if len(nome) <= 0:
+                print("Nome invalido")
+            else:
+                nome = nome
+                break
+        while True:
+            site = input("Qual o site do fabricante?")
+            if len(site) < 1 or len(site) > 63:
+                print("Tamanho inválido")
+            elif site.split()[0] == "-" or site.split()[-1] == '-':
+                print("Formato incorreto")
+            else:
+                break
+        while True:
+            telefone = input("Qual o telefone do fabricante?")
+            if len(telefone) < 8 or len(telefone) > 11:
+                print("Tamanho de número incorreto")
+            elif telefone[:2] not in dds:
+                print("DDD do telefone inexistente!")
+            else:
+                break
+        while True:
+            uf = input("Qual o UF(Estado) do fabricante?").upper()
+            if uf not in UFS:
+                print("UF incorreta, tente novamente!")
+            else:
+                break
+        break
+    cadastro_fabr = Fabricantes(nome, site, telefone, uf)
+    fabricantes_nomes.append(cadastro_fabr.nome)
+    fabricantes_lista.append(cadastro_fabr)
+    return cadastro_fabr
+
+
+def cadastrar_produto():
+    while True:
+        descricao = input("Nome do produto:")
+        while True:
+            try:
+                peso = float(input("Peso do produto em gramas: "))
+                if peso < 0:
+                    print("Peso incorreto")
+                elif peso < 50 or peso > 50000:
+                    print("Peso fora do limite permitido")
+                else:
+                    break
+            except ValueError:
+                print("Erro: o valor inserido não é um número válido")
+            else:
+                peso = peso
+        while True:
+            try:
+                valor_compra = float(input("Valor de compra:"))
+                if valor_compra < 0:
+                    print("Valor incorreto")
+                elif valor_compra < 0.50 or valor_compra > 8000:
+                    print("Valor de compra fora do limite permitido")
+                else:
+                    break
+            except ValueError:
+                print("Erro: Valor incorreto")
+            else:
+                valor_compra = valor_compra
+        while True:
+            try:
+                valor_venda = float(input("Valor de venda:"))
+                if valor_venda < 0:
+                    print("Valor incorreto")
+                elif valor_venda < valor_compra:
+                    print("Valor de compra é menor")
+                elif valor_venda < 1 or valor_venda > 10000:
+                    print("Valor de venda fora do limite permitido")
+                else:
+                    break
+            except ValueError:
+                print("Erro: Valor incorreto")
+            else:
+                valor_venda = valor_venda
+        while True:
+            try:
+                nome_fabricante = input("Nome do fabricante:")
+                if nome_fabricante not in fabricantes_nomes:
+                    print("Fabricante inexistente ou incorreto")
+                    print(f"Fabricantes: {fabricantes_nomes}")
+                else:
+                    break
+            except ValueError:
+                print("Erro: Valor incorreto")
+            else:
+                nome_fabricante = nome_fabricante
+        break
+    cadastro_produto = Produtos(descricao, peso, valor_compra, valor_venda, nome_fabricante)
+    produtos_lista.append(cadastro_produto)
+    return cadastro_produto
