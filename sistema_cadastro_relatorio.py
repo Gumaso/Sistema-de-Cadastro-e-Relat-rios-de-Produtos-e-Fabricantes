@@ -1,4 +1,4 @@
-#Gerenciador de Produtos e Fabricantes
+# Gerenciador de Produtos e Fabricantes
 produtos_lista = []
 fabricantes_nomes = []
 fabricantes_lista = []
@@ -6,10 +6,12 @@ dds = ['68', '82', '96', '92', '97', '71', '73', '74', '75', '77', '85', '88', '
        '65', '66', '67', '31', '32', '33', '34', '35', '37', '38', '91', '93', '94', '83', '41', '42', '43', '44', '45',
        '46', '81', '87', '86', '89', '21', '22', '24', '84', '51', '53', '54', '55', '69', '95', '47', '48', '49', '11',
        '12', '13', '14', '15', '16', '17', '18', '19', '79', '63']
-UFS =['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
-                          'PB',
-                          'PR',
-                          'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
+UFS = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA',
+       'PB',
+       'PR',
+       'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO']
+
+
 class Produtos:
     def __init__(self, descricao, peso, valor_compra, valor_venda, fabricante):
         self.descricao = descricao
@@ -27,6 +29,7 @@ class Fabricantes:
         self.site = site
         self.telefone = telefone
         self.uf = uf
+
 
 def cadastrar_fabricante():
     while True:
@@ -64,6 +67,174 @@ def cadastrar_fabricante():
     fabricantes_nomes.append(cadastro_fabr.nome)
     fabricantes_lista.append(cadastro_fabr)
     return cadastro_fabr
+
+
+def listar_marcas():
+    print("""
+                ================================================
+                RELATORIO 1 - LISTA DE TODAS AS MARCAS
+                ================================================
+                -------------+----------------+-------------------------------+-----------
+                Marca        |   Site         | Telefone       | UF
+    """)
+    for item in fabricantes_lista:
+        print(f"""
+        -------------+----------------+-------------------------------+-----------
+                {item.nome} | {item.site} | {item.telefone}            | {item.uf}
+        """)
+    return
+
+
+def listar_produtos_uf():
+    while True:
+        estado = input("Qual estado?").upper()
+        if estado not in UFS:
+            print("Estado invalido!")
+        else:
+            break
+    fabri_estados_nome = []
+    for fabri in fabricantes_lista:
+        if fabri.uf == estado:
+            fabri_estados_nome.append(fabri.nome)
+
+    print(f"PRODUTOS DO ESTADO {estado}")
+    for produto in produtos_lista:
+        if produto.fabricante in fabri_estados_nome:
+            print(f"""
+        |________________________________________+
+        |Descrição: {produto.descricao}
+        |Peso em gramas: {produto.peso}g
+        |Valor de compra:R${produto.valor_compra:.2f}
+        |Valor de venda: R${produto.valor_venda:.2f}
+        |Fabricante: {produto.fabricante}
+        +_______________________________________+""")
+
+
+def listar_produtos_marca():
+    marca = input("De qual marca deseja saber os produtos?")
+    for produto in produtos_lista:
+        if produto.fabricante == marca:
+            print(f"""
+                            +________________________________________+
+                            |Descrição: {produto.descricao}|
+                            |Peso em gramas: {produto.peso}g|
+                            |Valor de compra:R${produto.valor_compra:.2f}|
+                            |Valor de venda: R${produto.valor_venda:.2f}|
+                            |Fabricante: {produto.fabricante}|
+                            +_______________________________________+""")
+
+
+def listar_produtos():
+    for item in produtos_lista:
+        print(f"""
+        |________________________________________+
+        |Descrição: {item.descricao}
+        |Peso em kgs: {item.peso}
+        |Valor de compra:R${item.valor_compra:.2f}
+        |Valor de venda: R${item.valor_venda:.2f}
+        |Fabricante: {item.fabricante}
+        +_______________________________________+""")
+
+
+def produto_mais_caro():
+    global nome_fabr
+    valores_produtos = {}
+    estados = []
+    for prod in produtos_lista:
+        valores_produtos.update({prod.fabricante: prod.valor_venda})
+    produto_maior_valor = max(valores_produtos.values())
+    for fabri in fabricantes_lista:
+        for chave, valor in valores_produtos.items():
+            if valor == produto_maior_valor:
+                nome_fabr = chave
+        if fabri.nome == nome_fabr:
+            estados.append(fabri.uf)
+    print(f"Os estados com o(s) produto(s) mais caro são:")
+    for estado in estados:
+        print(f"UF: {estado} | Preço: R${produto_maior_valor}")
+
+
+def produto_mais_barato():
+    valores = []
+    for prod in produtos_lista:
+        valores.append(prod.valor_venda)
+    valores_produto = {}
+    for produto in produtos_lista:
+        if produto.valor_venda == min(valores):
+            item = {produto.valor_venda: produto.fabricante}
+            valores_produto.update(item)
+    print("Os fabricantes com os produtos mais barato são:")
+    for fabricante in valores_produto.values():
+        print(f"Fabricante: {fabricante}")
+
+
+def crescente_valor_produto():
+    valores = []
+    for produto in produtos_lista:
+        valores.append(produto.valor_venda)
+    print("Valores dos produtos em ordem crescente")
+    valores = sorted(valores)
+    for valor in valores:
+        print(f"R$: {valor:.2f}")
+
+
+def crescente_valor_lucro_produto():
+    lucro_produtos = []
+    for x in produtos_lista:
+        lucro_produtos.append(x.valor_venda - x.valor_compra)
+    print("Valores dos lucros dos produtos em ordem crescente")
+    lucro_produtos = sorted(lucro_produtos)
+    for valor in lucro_produtos:
+        print(f"R$: {valor:.2f}")
+
+
+def crescente_valor_lucro_porcentagem_produto():
+    lucro_produtos = []
+    for x in produtos_lista:
+        lucro_produtos.append(((x.valor_venda - x.valor_compra) / x.valor_compra) * 100)
+    print("Valores percentuais dos lucros dos produtos em ordem crescente")
+    lucro_produtos = sorted(lucro_produtos)
+    for valor in lucro_produtos:
+        print(f"{valor:.2f}%")
+
+
+def marcas_descrecente():
+    marcas_nomes = sorted(fabricantes_nomes, reverse=True)
+    organizando = []
+    for item in fabricantes_lista:
+        for nome in marcas_nomes:
+            if item.nome == nome:
+                organizando.append(item)
+    print("Marcas em ordem alfabetica descrescente")
+
+    for marca in organizando:
+        print(f"""
+        Nome da marca: {marca.nome}
+        Site: {marca.site}
+        Telefone: {marca.telefone}
+        UF: {marca.uf}""")
+
+
+def produtos_crescente():
+    produtos_nome = []
+    for produt in produtos_lista:
+        produtos_nome.append(produt.descricao)
+    produtos_nome = sorted(produtos_nome)
+    organizando = []
+    for item in produtos_lista:
+        for nome in produtos_nome:
+            if item.descricao == nome:
+                organizando.append(item)
+    print("Produtos em ordem alfabetica crescente")
+    for item in organizando:
+        print(f"""
+                |________________________________________+
+                |Descrição: {item.descricao}
+                |Peso em kgs: {item.peso}
+                |Valor de compra:R${item.valor_compra:.2f}
+                |Valor de venda: R${item.valor_venda:.2f}
+                |Fabricante: {item.fabricante}
+                +_______________________________________+""")
 
 
 def cadastrar_produto():
