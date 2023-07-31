@@ -297,3 +297,65 @@ def cadastrar_produto():
     cadastro_produto = Produtos(descricao, peso, valor_compra, valor_venda, nome_fabricante)
     produtos_lista.append(cadastro_produto)
     return cadastro_produto
+
+while True:
+    if len(fabricantes_lista) < 2 or len(fabricantes_lista) > 5:
+        print("Número inválido de fabricantes, necessário o cadastro!")
+        cadas_fabri = cadastrar_fabricante()
+    else:
+        cadastrar = input("Deseja cadastrar um novo fabricante?[S]/[N]").upper()
+        if cadastrar == 'S':
+            cadas_fabri = cadastrar_fabricante()
+        else:
+            print()
+    if len(produtos_lista) < 5 or len(produtos_lista) > 50:
+        print("Número inválido de produtos, necessário o cadastro!")
+        cadas_produt = cadastrar_produto()
+    else:
+        cadastrar2 = input('Deseja cadastrar um novo produto?[S]/[N]').upper()
+        if cadastrar2 == 'S':
+            cadas_produt = cadastrar_produto()
+        else:
+            print()
+    opcao = int(input("""
+                                         [0] Sair do programa
+                                         [1] Listar todas as marcas
+                                         [2] Listar todos os produtos
+                                         [3] Listar os produtos de um determinado estado   
+                                         [4] Listar os produtos de uma determinada marca  
+                                         [5] Apresentar o(s) estado (s) onde está registrado o produto mais caro
+                                         [6] Apresentar o(s) fabricante(s) onde está registrado o produto mais barato
+                                         [7] Listar todos os produtos em ordem crescente de valor
+                                         [8] Listar todos os produtos em ordem crescente de maior "valor do lucro"
+                                         [9] Listar todos os produtos em ordem crescente de maior "percentual de lucro"
+                                         _____________________________________________________________________________
+                                         [10] Listar todos os produtos em ordem alfabética crescente A-Z
+                                         [11] Listar todas as marcas em ordem alfabética decrescente Z-A
+                                         """))
+    if opcao == 0:
+        print("Programa encerrado")
+        break
+    elif opcao == 1:
+        listar_marcas()
+    elif opcao == 2:
+        listar_produtos()
+    elif opcao == 3:
+        listar_produtos_uf()
+    elif opcao == 4:
+        listar_produtos_marca()
+    elif opcao == 5:
+        produto_mais_caro()
+    elif opcao == 6:
+        produto_mais_barato()
+    elif opcao == 7:
+        crescente_valor_produto()
+    elif opcao == 8:
+        crescente_valor_lucro_produto()
+    elif opcao == 9:
+        crescente_valor_lucro_porcentagem_produto()
+    elif opcao == 10:
+        produtos_crescente()
+    elif opcao == 11:
+        marcas_descrecente()
+    else:
+        print("Apenas números e entre 1 - 11")
